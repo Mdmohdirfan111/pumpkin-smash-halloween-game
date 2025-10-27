@@ -1,4 +1,4 @@
-// wallet.js - Only wallet connection and network switch
+// wallet.js - Wallet connection and network switch
 class WalletConnection {
     constructor() {
         this.web3 = null;
@@ -13,6 +13,11 @@ class WalletConnection {
 
     async setupEventListeners() {
         document.getElementById('connectWallet').addEventListener('click', () => this.connectWallet());
+        // Handle account/network changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', () => location.reload());
+            window.ethereum.on('chainChanged', () => location.reload());
+        }
     }
 
     async connectWallet() {
@@ -35,11 +40,14 @@ class WalletConnection {
                 // Initialize contract
                 await this.initContract();
                 
+                // Load leaderboard and player stats
+                await this.loadInitialData();
+                
                 console.log("Wallet connected successfully!");
                 
             } catch (error) {
                 console.error("Wallet connection failed:", error);
-                alert("Wallet connection failed: " + error.message);
+                alert("Wallet connection failed: " + (error.message || "Unknown error"));
             }
         } else {
             alert("Please install MetaMask!");
@@ -48,13 +56,11 @@ class WalletConnection {
 
     async switchToSomniaNetwork() {
         try {
-            // Try to switch to Somnia network
             await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: SOMNIA_CONFIG.chainId }],
             });
         } catch (switchError) {
-            // If network not added, add it
             if (switchError.code === 4902) {
                 try {
                     await window.ethereum.request({
@@ -62,10 +68,10 @@ class WalletConnection {
                         params: [SOMNIA_CONFIG],
                     });
                 } catch (addError) {
-                    throw new Error("Failed to add Somnia network to MetaMask");
+                    throw new Error("Failed to add Somnia network to MetaMask: " + addError.message);
                 }
             } else {
-                throw new Error("Failed to switch to Somnia network");
+                throw new Error("Failed to switch to Somnia network: " + switchError.message);
             }
         }
     }
@@ -83,7 +89,12 @@ class WalletConnection {
         }
     }
 
-    // Getter methods for other files
+    async loadInitialData() {
+        await contractHandler.loadLeaderboard();
+        await contractHandler.loadPlayerStats();
+    }
+
+    // Getter methods
     getWeb3() {
         return this.web3;
     }

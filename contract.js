@@ -1,33 +1,27 @@
-// contract.js - Contract interactions
 class ContractHandler {
     constructor() {}
 
     async submitScore(score) {
-        if (!wallet.isConnected()) {
-            throw new Error("Wallet not connected");
-        }
-        if (score > 100) {
-            throw new Error("Score too high! Possible cheat detected.");
-        }
+        if (!wallet.isConnected()) throw new Error("Wallet not connected");
+        if (score > 100) throw new Error("Score too high!");
 
         const contract = wallet.getContract();
         const userAddress = wallet.getUserAddress();
 
-        document.getElementById('submitScore').classList.add('loading');
-        document.getElementById('submitScore').textContent = 'Submitting...';
+        const btn = document.getElementById('submitScore');
+        btn.classList.add('loading');
+        btn.textContent = 'Submitting...';
 
         try {
-            const tx = await contract.methods.submitScore(score).send({
-                from: userAddress
-            });
+            await contract.methods.submitScore(score).send({ from: userAddress });
             await this.loadLeaderboard();
             await this.loadPlayerStats();
-            return tx;
+            alert("Score submitted! Tokens minted.");
         } catch (error) {
-            throw error;
+            alert("Failed: " + (error.message || "Transaction failed"));
         } finally {
-            document.getElementById('submitScore').classList.remove('loading');
-            document.getElementById('submitScore').textContent = 'Submit Score';
+            btn.classList.remove('loading');
+            btn.textContent = 'Submit Score';
         }
     }
 
@@ -41,8 +35,8 @@ class ContractHandler {
             const addresses = Array.isArray(result[0]) ? result[0] : [];
             const scores = Array.isArray(result[1]) ? result[1] : [];
             this.updateLeaderboardUI(addresses, scores);
-        } catch (error) {
-            console.error("Failed to load leaderboard:", error);
+        } catch (e) {
+            console.error(e);
             this.updateLeaderboardUI([], []);
         }
     }
@@ -51,14 +45,14 @@ class ContractHandler {
         const list = document.getElementById('leaderboardList');
         list.innerHTML = '';
         if (addresses.length === 0) {
-            list.innerHTML = '<div class="leaderboard-item"><span>No data available</span></div>';
+            list.innerHTML = '<div class="leaderboard-item"><span>No players yet</span></div>';
             return;
         }
         addresses.forEach((addr, i) => {
-            const shortAddr = addr.substring(0, 6) + '...' + addr.substring(38);
+            const short = addr.slice(0,6) + '...' + addr.slice(-4);
             const item = document.createElement('div');
             item.className = 'leaderboard-item';
-            item.innerHTML = `<span>#${i+1} ${shortAddr}</span><span>${scores[i]} PUMPKIN</span>`;
+            item.innerHTML = `<span>#${i+1} ${short}</span><span>${scores[i]} PUMPKIN</span>`;
             list.appendChild(item);
         });
     }
@@ -68,19 +62,15 @@ class ContractHandler {
         const contract = wallet.getContract();
         if (!contract) return;
 
-        const userAddress = wallet.getUserAddress();
+        const user = wallet.getUserAddress();
         try {
-            const result = await contract.methods.getPlayerStats(userAddress).call();
-            const [totalTokens, lastScore, gamesPlayed] = result || [0, 0, 0];
-            this.updatePlayerStatsUI(totalTokens, lastScore, gamesPlayed);
-        } catch (error) {
-            console.error("Failed to load player stats:", error);
-            this.updatePlayerStatsUI(0, 0, 0);
+            const result = await contract.methods.getPlayerStats(user).call();
+            const [total] = result || [0, 0, 0];
+            document.getElementById('tokens').textContent = `PUMPKIN Tokens: ${total}`;
+        } catch (e) {
+            console.error(e);
+            document.getElementById('tokens').textContent = `PUMPKIN Tokens: 0`;
         }
-    }
-
-    updatePlayerStatsUI(totalTokens, lastScore, gamesPlayed) {
-        document.getElementById('tokens').textContent = `PUMPKIN Tokens: ${totalTokens}`;
     }
 }
 

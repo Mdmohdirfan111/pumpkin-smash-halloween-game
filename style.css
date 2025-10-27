@@ -102,10 +102,10 @@ button:disabled {
     }
 }
 
-/* CSS-ONLY PUMPKIN (NO IMAGE NEEDED) */
+/* CSS PUMPKIN - NO IMAGE NEEDED */
 .pumpkin {
     position: absolute;
-    width: 80px;
+    width: px;
     height: 80px;
     background: radial-gradient(circle at 30% 30%, #ff8c35, #ff6b35);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
@@ -153,7 +153,6 @@ button:disabled {
     100% { transform: scale(0, 0); opacity: 0; }
 }
 
-/* Particle Effects */
 .particles {
     position: absolute;
     width: 80px;

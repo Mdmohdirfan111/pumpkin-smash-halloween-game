@@ -6,14 +6,13 @@ class ContractHandler {
         if (!wallet.isConnected()) {
             throw new Error("Wallet not connected");
         }
-        if (score > 100) { // Basic anti-cheat: cap score per game
+        if (score > 100) {
             throw new Error("Score too high! Possible cheat detected.");
         }
 
         const contract = wallet.getContract();
         const userAddress = wallet.getUserAddress();
 
-        // Show loading
         document.getElementById('submitScore').classList.add('loading');
         document.getElementById('submitScore').textContent = 'Submitting...';
 
@@ -21,27 +20,27 @@ class ContractHandler {
             const tx = await contract.methods.submitScore(score).send({
                 from: userAddress
             });
-            // Refresh data after tx
             await this.loadLeaderboard();
             await this.loadPlayerStats();
             return tx;
         } catch (error) {
             throw error;
         } finally {
-            // Reset button
             document.getElementById('submitScore').classList.remove('loading');
             document.getElementById('submitScore').textContent = 'Submit Score';
         }
     }
 
     async loadLeaderboard() {
-        if (!wallet.isConnected()) return [];
-
+        if (!wallet.isConnected()) return;
         const contract = wallet.getContract();
+        if (!contract) return;
+
         try {
-            const [addresses, scores] = await contract.methods.getLeaderboard().call();
+            const result = await contract.methods.getLeaderboard().call();
+            const addresses = Array.isArray(result[0]) ? result[0] : [];
+            const scores = Array.isArray(result[1]) ? result[1] : [];
             this.updateLeaderboardUI(addresses, scores);
-            return { addresses, scores };
         } catch (error) {
             console.error("Failed to load leaderboard:", error);
             this.updateLeaderboardUI([], []);
@@ -65,14 +64,15 @@ class ContractHandler {
     }
 
     async loadPlayerStats() {
-        if (!wallet.isConnected()) return null;
-
+        if (!wallet.isConnected()) return;
         const contract = wallet.getContract();
+        if (!contract) return;
+
         const userAddress = wallet.getUserAddress();
         try {
-            const [totalTokens, lastScore, gamesPlayed] = await contract.methods.getPlayerStats(userAddress).call();
+            const result = await contract.methods.getPlayerStats(userAddress).call();
+            const [totalTokens, lastScore, gamesPlayed] = result || [0, 0, 0];
             this.updatePlayerStatsUI(totalTokens, lastScore, gamesPlayed);
-            return { totalTokens, lastScore, gamesPlayed };
         } catch (error) {
             console.error("Failed to load player stats:", error);
             this.updatePlayerStatsUI(0, 0, 0);
@@ -81,9 +81,7 @@ class ContractHandler {
 
     updatePlayerStatsUI(totalTokens, lastScore, gamesPlayed) {
         document.getElementById('tokens').textContent = `PUMPKIN Tokens: ${totalTokens}`;
-        // Can add more UI if needed
     }
 }
 
-// Global contract handler
 let contractHandler = new ContractHandler();

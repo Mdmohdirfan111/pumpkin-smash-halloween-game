@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎃 Pumpkin Smash - Halloween Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎃 PUMPKIN SMASH 🎃</h1>
+            <div id="wallet-section">
+                <button id="connectWallet">Connect Wallet</button>
+                <span id="walletAddress"></span>
+            </div>
+        </header>
+
+        <!-- Game Area -->
+        <div class="game-container">
+            <div class="game-info">
+                <div id="score">Score: 0</div>
+                <div id="timer">Time: 60s</div>
+                <div id="tokens">PUMPKIN Tokens: 0</div>
+            </div>
+            
+            <div id="gameArea"></div>
+            
+            <div class="controls">
+                <button id="startGame" disabled>Start Game</button>
+                <button id="submitScore" disabled>Submit Score</button>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard">
+            <h2>🏆 Leaderboard</h2>
+            <div id="leaderboardList">
+                <div class="leaderboard-item">
+                    <span>Connect wallet to see leaderboard</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web3 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    
+    <!-- Our JavaScript Files -->
+    <script src="config.js"></script>
+    <script src="wallet.js"></script>
+    <script src="contract.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

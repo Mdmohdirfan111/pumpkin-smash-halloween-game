@@ -1,0 +1,43 @@
+// game.js - Only game logic
+class PumpkinGame {
+    constructor() {
+        this.score = 0;
+        this.timeLeft = 60;
+        this.gameActive = false;
+        this.timer = null;
+        this.pumpkins = [];
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        document.getElementById('startGame').addEventListener('click', () => this.startGame());
+        document.getElementById('submitScore').addEventListener('click', () => this.submitScore());
+    }
+
+    startGame() {
+        if (!wallet.isConnected()) {
+            alert("Please connect your wallet first!");
+            return;
+        }
+
+        this.resetGame();
+        this.gameActive = true;
+        document.getElementById('startGame').disabled = true;
+        document.getElementById('submitScore').disabled = true;
+        
+        this.startTimer();
+        this.generatePumpkins();
+    }
+
+    // ... (rest of the game logic remains SAME as previous game.js)
+    // SmashPumpkin, generatePumpkins, endGame, etc.
+}
+
+// Initialize game
+window.addEventListener('load', () => {
+    new PumpkinGame();
+});

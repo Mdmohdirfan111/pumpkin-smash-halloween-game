@@ -102,13 +102,30 @@ button:disabled {
     }
 }
 
+/* CSS-ONLY PUMPKIN (NO IMAGE NEEDED) */
 .pumpkin {
     position: absolute;
     width: 80px;
     height: 80px;
-    background: url('images/pumpkin.png') no-repeat center/cover;
+    background: radial-gradient(circle at 30% 30%, #ff8c35, #ff6b35);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 20px #ff6b35, inset -10px -10px 20px rgba(0,0,0,0.3);
     cursor: pointer;
     transition: transform 0.1s ease;
+    position: relative;
+}
+
+.pumpkin::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 25px;
+    background: #228B22;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #228B22;
 }
 
 .pumpkin:hover {
@@ -193,7 +210,6 @@ button:disabled {
     border: 1px solid #ff6b35;
 }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -225,7 +241,6 @@ button:disabled {
     margin-top: 20px;
 }
 
-/* Loading State */
 .loading {
     opacity: 0.7;
     pointer-events: none;

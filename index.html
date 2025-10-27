@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header>
             <h1>PUMPKIN SMASH</h1>
             <div id="wallet-section">
@@ -17,24 +16,20 @@
             </div>
         </header>
 
-        <!-- Game Area -->
         <div class="game-container">
             <div class="game-info">
                 <div id="score">Score: 0</div>
-                <div id="timer">Time: 60s</div>
+                <div id="timer">Time: 60s</line</div>
                 <div id="tokens">PUMPKIN Tokens: 0</div>
                 <div id="combo">Combo: x1</div>
             </div>
-            
             <div id="gameArea"></div>
-            
             <div class="controls">
                 <button id="startGame" disabled>Start Game</button>
                 <button id="submitScore" disabled>Submit Score</button>
             </div>
         </div>
 
-        <!-- Leaderboard -->
         <div class="leaderboard">
             <h2>Leaderboard (Top 10)</h2>
             <div id="leaderboardList">
@@ -45,7 +40,6 @@
         </div>
     </div>
 
-    <!-- Game Over Modal -->
     <div id="gameOverModal" class="modal">
         <div class="modal-content">
             <h2>Game Over!</h2>
@@ -60,10 +54,7 @@
     <audio id="comboSound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQAA"></audio>
     <audio id="gameOverSound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQAA"></audio>
 
-    <!-- Web3 Library -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    
-    <!-- Our JavaScript Files -->
     <script src="config.js"></script>
     <script src="wallet.js"></script>
     <script src="contract.js"></script>

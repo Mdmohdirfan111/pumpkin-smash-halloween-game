@@ -1,0 +1,35 @@
+// contract.js - Only contract interactions
+class ContractHandler {
+    constructor() {}
+
+    async submitScore(score) {
+        if (!wallet.isConnected()) {
+            throw new Error("Wallet not connected");
+        }
+
+        const contract = wallet.getContract();
+        const userAddress = wallet.getUserAddress();
+
+        return await contract.methods.submitScore(score).send({
+            from: userAddress
+        });
+    }
+
+    async loadLeaderboard() {
+        if (!wallet.isConnected()) return [];
+
+        const contract = wallet.getContract();
+        return await contract.methods.getLeaderboard().call();
+    }
+
+    async loadPlayerStats() {
+        if (!wallet.isConnected()) return null;
+
+        const contract = wallet.getContract();
+        const userAddress = wallet.getUserAddress();
+        return await contract.methods.getPlayerStats(userAddress).call();
+    }
+}
+
+// Global contract handler
+let contractHandler = new ContractHandler();

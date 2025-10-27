@@ -23,6 +23,7 @@
                 <div id="score">Score: 0</div>
                 <div id="timer">Time: 60s</div>
                 <div id="tokens">PUMPKIN Tokens: 0</div>
+                <div id="combo">Combo: x1</div>
             </div>
             
             <div id="gameArea"></div>
@@ -35,7 +36,7 @@
 
         <!-- Leaderboard -->
         <div class="leaderboard">
-            <h2>🏆 Leaderboard</h2>
+            <h2>🏆 Leaderboard (Top 10)</h2>
             <div id="leaderboardList">
                 <div class="leaderboard-item">
                     <span>Connect wallet to see leaderboard</span>
@@ -43,6 +44,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2>Game Over!</h2>
+            <p id="finalScore">Final Score: 0</p>
+            <p id="tokensEarned">Tokens Earned: 0</p>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="smashSound" src="sounds/smash.mp3"></audio>
+    <audio id="comboSound" src="sounds/combo.mp3"></audio>
+    <audio id="gameOverSound" src="sounds/over.mp3"></audio>
 
     <!-- Web3 Library -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>

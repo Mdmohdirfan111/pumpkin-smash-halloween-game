@@ -10,6 +10,7 @@ body {
     font-family: 'Courier New', monospace;
     min-height: 100vh;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 .container {
@@ -94,16 +95,67 @@ button:disabled {
     cursor: crosshair;
 }
 
+@media (max-width: 850px) {
+    #gameArea {
+        width: 100%;
+        height: 400px;
+    }
+}
+
 .pumpkin {
     position: absolute;
     width: 80px;
     height: 80px;
+    background: url('images/pumpkin.png') no-repeat center/cover;
     cursor: pointer;
     transition: transform 0.1s ease;
 }
 
 .pumpkin:hover {
     transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.pumpkin.falling {
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    from { top: -80px; }
+    to { top: 500px; }
+}
+
+.pumpkin.smash {
+    animation: squash 0.3s ease;
+    pointer-events: none;
+}
+
+@keyframes squash {
+    0% { transform: scale(1, 1); }
+    50% { transform: scale(1.2, 0.8); }
+    100% { transform: scale(0, 0); opacity: 0; }
+}
+
+/* Particle Effects */
+.particles {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ff6b35;
+    border-radius: 50%;
+    animation: burst 0.5s ease-out;
+}
+
+@keyframes burst {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
 }
 
 .controls {
@@ -139,4 +191,42 @@ button:disabled {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     border: 1px solid #ff6b35;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #1a1a2e;
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #ff6b35;
+    text-align: center;
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+#closeModal {
+    margin-top: 20px;
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
 }
